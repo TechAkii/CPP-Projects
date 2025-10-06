@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <limits>  // add at the top for numeric_limits
+#include <limits>  
 
 using namespace std;
 
-// ================== Person Class ==================
 class person {
 protected:
     string name;
@@ -22,7 +21,6 @@ public:
     }
 };
 
-// ================== Patient Class ==================
 class patient : public person {
 protected:
     int patientID;
@@ -55,7 +53,6 @@ public:
     }
 };
 
-// ================== Doctor Struct ==================
 struct Doctor {
     int id;
     string name;
@@ -63,7 +60,6 @@ struct Doctor {
     string timeSlot;
 };
 
-// Doctor timetable
 vector<Doctor> doctors = {
     {1, "Dr. Perera", "Cardiologist", "9:00 AM - 11:00 AM"},
     {2, "Dr. Silva", "Dermatologist", "11:30 AM - 1:30 PM"},
@@ -71,10 +67,37 @@ vector<Doctor> doctors = {
     {4, "Dr. Jayawardena", "Pediatrician", "4:30 PM - 6:00 PM"}
 };
 
-// ================== Global Data ==================
+struct Nurse {
+    int nurse_id;
+    string name;
+    int votes;
+    string shift;
+};
+
+vector<Nurse> nurses = {
+    {101, "Alice", 5, "Morning"},
+    {102, "Mary", 3, "Evening"},
+    {103, "Sita", 7, "Night"},
+    {104, "Nimal", 2, "Morning"},
+    {105, "Kavindi", 4, "Evening"}
+};
+
+struct Vote {
+    int doctor_id;
+    int nurse_id;
+    int value; // vote count
+};
+
+vector<Vote> votes = {
+    {1, 101, 2},   // 2 votes for Alice under Dr. Perera
+    {1, 104, 1},   // 1 vote for Nimal under Dr. Perera
+    {2, 102, 3},   // 3 votes for Mary under Dr. Silva
+    {3, 103, 4},   // 4 votes for Sita under Dr. Fernando
+    {4, 105, 2}    // 2 votes for Kavindi under Dr. Jayawardena
+};
+
 vector<patient> patients;
 
-// ================== Functions ==================
 void makeAppointment(Doctor d) {
     cout << "\n--- Appointment Confirmation ---\n";
     cout << "Doctor: " << d.name << endl;
@@ -143,31 +166,72 @@ void patient_registration() {
 
 
 void admin() {
-    cout << "\n--- Admin Section ---\n";
-    cout << "What do you want to see?" << endl;
-	cout << "1. Patient List" << endl;
-    cout << "2. Doctor Timetable" << endl;
-    cout << "Enter your choice: ";
-    int choice;
-    cin >> choice;
-    if (choice == 1) {
-        cout << "\n--- Patient List ---\n";
-        for (auto& p : patients) {
-            p.display();
-            cout << "---------------------\n";
+
+    string password;
+	cout << "enter admin password: ";
+	cin >> password;
+
+    if (password == "admin123") {
+
+
+		int choice;
+
+        cout << "\n--- Admin Section ---\n";
+
+        cout << "What do you want to see?" << endl;
+        cout << "1. Patient " << endl;
+        cout << "2. Doctor " << endl;
+		cout << "3. Nurse " << endl;
+		cout << "4. Vote" << endl;
+
+
+        cout << "Enter your choice: ";
+		cin >> choice;
+
+        if (choice == 1) {
+            cout << "\n--- Patient List ---\n";
+            for (auto& p : patients) {
+                p.display();
+                cout << "---------------------\n";
+            }
         }
+        else if (choice == 2) {
+            cout << "\n--- Doctor List ---\n";
+            for (auto& d : doctors) {
+                cout << "Doctor ID: " << d.id << endl;
+                cout << "Name: " << d.name << endl;
+                cout << "Specialty: " << d.specialty << endl;
+                cout << "Time Slot: " << d.timeSlot << endl;
+                cout << "---------------------\n";
+            }
+		}
+        else if (choice == 3) {
+            cout << "\n--- Nurse List ---\n";
+            for (auto& n : nurses) {
+                cout << "Nurse ID: " << n.nurse_id << endl;
+                cout << "Name: " << n.name << endl;
+                cout << "Votes: " << n.votes << endl;
+                cout << "Shift: " << n.shift << endl;
+                cout << "---------------------\n";
+            }
+        }
+        else if (choice == 4) {
+            cout << "\n--- Vote List ---\n";
+            for (auto& v : votes) {
+                cout << "Doctor ID: " << v.doctor_id << endl;
+                cout << "Nurse ID: " << v.nurse_id << endl;
+                cout << "Vote Value: " << v.value << endl;
+                cout << "---------------------\n";
+            }
+        }
+        else {
+            cout << "Invalid choice.\n";
+        }  
     }
-    else if (choice == 2) {
-        cout << "\n--- Doctor Timetable ---\n";
-        for (auto& d : doctors) {
-            cout << d.id << ". " << d.name
-                << " | " << d.specialty
-                << " | " << d.timeSlot << endl;
-        };
-    }
+
     else {
-        cout << "Invalid choice.\n";
-	}
+        
+    }
 
 }
 
@@ -185,6 +249,7 @@ void menu(int choice) {
         admin();
     }
     else if (choice == 5) {
+        cout << "\nThank you join with us. \n";
         cout << "\nExiting program...\n";
     }
     else {
@@ -193,11 +258,12 @@ void menu(int choice) {
 }
 
 
+
 int main() {
     int choice;
     do {
         cout << "\n" << "                                  ================================= \n";
-        cout << "                                             SIRILOKA HOSPITAL        \n";
+        cout << "                                            SIRILOKA HOSPITAL        \n";
         cout << "                                  =================================\n";
 
         cout << "How can I help you today ?" << endl;
